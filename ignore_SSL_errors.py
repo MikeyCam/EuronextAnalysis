@@ -1,6 +1,7 @@
+# https://stackoverflow.com/questions/15445981/how-do-i-disable-the-security-certificate-check-in-python-requests
+
 import warnings
 import contextlib
-
 import requests
 from urllib3.exceptions import InsecureRequestWarning
 
