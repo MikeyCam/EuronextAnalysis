@@ -1,2 +1,4 @@
+# Ignore VS code pycache folder 
 __pycache__
-raw_data/price_yahoo.csv
+# Ignore data folder
+/data/
