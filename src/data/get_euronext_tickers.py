@@ -1,4 +1,4 @@
-from .import_csv import import_csv
+from import_csv import import_csv
 from typing import List
 import re
 import string
@@ -33,19 +33,22 @@ def import_euronext_file():
         'Name': 'stock_name',
         'ISIN': 'stock_isin',
         'Symbol': 'stock_euronext_symbol',
-        'Market': 'stock_exchange_markets',
-        'Trading Currency': 'stock_trading_currency'
+        'Market': 'stock_markets'
     }
     df = import_csv(file_location, name_mappings)
     # Correct special character is Oslo Bors if needed, might not be needed if you encoding is correct on the csv
-    df['stock_exchange_markets'] = df['stock_exchange_markets'].str.replace(
+    df['stock_markets'] = df['stock_markets'].str.replace(
         '�', 'ø')
     # Get the Yahoo city mapping
-    df['yahoo_city_code'] = df['stock_exchange_markets'].apply(
+    df['yahoo_city_code'] = df['stock_markets'].apply(
         lambda x: return_yahoo_city_code(x))
     # Create the full city code
-    df['yahoo_code'] = df['stock_euronext_symbol'].str.cat(
+    df['stock_ticker'] = df['stock_euronext_symbol'].str.cat(
         df['yahoo_city_code'], sep='.')
     # Keep first occurence and remove other duplicates
     df = df.drop_duplicates(['stock_isin'], keep='first')
-    return df
+    return df[['stock_name', 'stock_isin', 'stock_ticker', 'stock_markets']]
+
+
+# df = import_euronext_file()
+# print(df.head().to_markdown())
